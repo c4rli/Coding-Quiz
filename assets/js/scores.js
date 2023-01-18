@@ -27,6 +27,7 @@ function resetScores() {
     var emptyArray = [];
     localStorage.setItem("highscoresStorage", emptyArray);
     alert("Scores Cleared!")
+    location.reload()
 }
 
 // Load or generate highscores and add them to page
