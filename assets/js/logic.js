@@ -2,6 +2,15 @@
 var currentQuestion = 0;
 var timer = 60;
 var score = 0;
+var highscores = []; 
+
+
+if (localStorage.getItem("highscores1") === null) {
+    highscores = [];
+}else {
+    highscores = JSON.parse(localStorage.getItem("highscores1"));
+}
+
 
 //DOM variables 
 
@@ -9,8 +18,13 @@ var startScreen = document.querySelector("#start-screen");
 var questionsScreen = document.querySelector("#questions");
 var endScreen = document.querySelector("#end-screen");
 
-var questionTitle = document.querySelector("#question-title")
-var questionOptions = document.querySelector("#choices")
+var questionTitle = document.querySelector("#question-title");
+var questionOptions = document.querySelector("#choices");
+
+var inputInitials = document.querySelector("#initials");
+var submitScore = document.querySelector("#submit");
+
+// var highscoresEl = document.querySelector("#highscores");
 
 function playGame() {
     startScreen.setAttribute("class","hide");
@@ -32,6 +46,18 @@ function displayQuestion() {
     questionOptions.appendChild(options);
 }   
 
+// function displayHighscores() {
+
+//     highscoresEl.innerHTML = ('');
+//     highscores.forEach( function(values, i) {
+//         var entry = document.createElement("ul");
+//         entry.textContent = values;
+//         highscoresEl.appendChild(entry); 
+//     });
+
+//     // window.location.href = 'highscores.html';
+// }
+
 function gameOver() {
     alert("game Over");
     questionsScreen.setAttribute("class","hide");
@@ -51,13 +77,11 @@ function nextQuestion() {
 questionOptions.addEventListener("click", function(event) {
     var element = event.target;
   
-    // Check if the clicked element was an image
     if (element.matches("button")) {
-      // Get the current value of the image's data-state attribute
       var state = element.textContent;
       var answerIndex = questions[currentQuestion].answer;
 
-        if (state == questions[currentQuestion].choices[questions[currentQuestion].answer])
+        if (state == questions[currentQuestion].choices[answerIndex])
         {
             alert("Correct");
         }
@@ -66,8 +90,20 @@ questionOptions.addEventListener("click", function(event) {
         }
         currentQuestion++;
         nextQuestion();
-  
     }
   });
 
+  submitScore.addEventListener("click", function(event) {
+    var playerScore = score;
+    var playerInitials = inputInitials.value;
+    var scoreArray = [];
+    scoreArray.push(playerInitials);
+    scoreArray.push(playerScore);
+    highscores.push(scoreArray);
 
+    localStorage.setItem("highscores1", JSON.stringify(highscores));
+
+    // displayHighscores();
+    // alert();
+    window.location.href = 'highscores.html';
+  });
