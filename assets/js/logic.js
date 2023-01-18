@@ -1,16 +1,9 @@
 // Global variables
 var currentQuestion = 0;
-var timer = 60;
+var timer = 150;
 var score = 0;
-var highscores = []; 
-
-
-if (localStorage.getItem("highscores1") === null) {
-    highscores = [];
-}else {
-    highscores = JSON.parse(localStorage.getItem("highscores1"));
-}
-
+var countdownTime;
+var timerEl;
 
 //DOM variables 
 
@@ -23,12 +16,37 @@ var questionOptions = document.querySelector("#choices");
 
 var inputInitials = document.querySelector("#initials");
 var submitScore = document.querySelector("#submit");
+var time = document.querySelector("#time");
+
+loadHighscores();
 
 // var highscoresEl = document.querySelector("#highscores");
+time.textContent = timer;
+
+function loadHighscores() {
+    if (localStorage.getItem("highscoresStorage") == '' || localStorage.getItem("highscoresStorage") === null) {
+        highscores = [];
+    }else {
+        highscores = JSON.parse(localStorage.getItem("highscoresStorage"));
+    }
+    }
 
 function playGame() {
     startScreen.setAttribute("class","hide");
     questionsScreen.removeAttribute("class", "hide");
+    
+    countdownTimer(timer);
+
+    // var interval = setInterval(function() {
+    //     if (timer > 0) {
+    //         time.textContent = timer;
+    //         timer--;
+    //     } else {
+    //         gameOver();
+    //         clearInterval(interval);
+    //     }
+    // }, 1000);
+
     displayQuestion();
 }
 
@@ -59,6 +77,8 @@ function displayQuestion() {
 // }
 
 function gameOver() {
+    score = timer;
+    clearInterval(timerEl);
     alert("game Over");
     questionsScreen.setAttribute("class","hide");
     endScreen.removeAttribute("class", "hide");
@@ -69,9 +89,22 @@ function nextQuestion() {
         gameOver();
     }
     else {
-        
         displayQuestion();
     }
+}
+
+function countdownTimer(seconds) {
+    // var count = seconds;
+    timerEl = setInterval(function() {
+        if (timer > 0) {
+            // timer = count;
+            time.textContent = timer;
+            timer--;
+        } else {
+            gameOver();
+            clearInterval(timerEl);
+        }
+    }, 1000);
 }
 
 questionOptions.addEventListener("click", function(event) {
@@ -86,6 +119,7 @@ questionOptions.addEventListener("click", function(event) {
             alert("Correct");
         }
         else {
+            timer -=10;
             alert("Wrong");
         }
         currentQuestion++;
@@ -96,12 +130,12 @@ questionOptions.addEventListener("click", function(event) {
   submitScore.addEventListener("click", function(event) {
     var playerScore = score;
     var playerInitials = inputInitials.value;
-    var scoreArray = [];
-    scoreArray.push(playerInitials);
-    scoreArray.push(playerScore);
-    highscores.push(scoreArray);
+    // var scoreArray = [];
+    // scoreArray.push(playerInitials);
+    // scoreArray.push(playerScore);
+    highscores.push([playerInitials,playerScore]);
 
-    localStorage.setItem("highscores1", JSON.stringify(highscores));
+    localStorage.setItem("highscoresStorage", JSON.stringify(highscores));
 
     // displayHighscores();
     // alert();
