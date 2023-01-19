@@ -14,11 +14,22 @@ var endScreen = document.querySelector("#end-screen");
 // Question DOM elements
 var questionTitle = document.querySelector("#question-title");
 var questionOptions = document.querySelector("#choices");
+var alertCorrect = document.querySelector(".alert-success");
+var alertWrong = document.querySelector(".alert-danger");
+var timerText = document.querySelector(".timer");
 
 // End screen DOM elements
 var inputInitials = document.querySelector("#initials");
 var submitScore = document.querySelector("#submit");
 var time = document.querySelector("#time");
+var finalScore = document.querySelector("#final-score");
+
+//Sound Effects 
+var soundCorrect = document.createElement("audio");
+soundCorrect.setAttribute("src", "./assets/sfx/correct.wav");
+var soundWrong = document.createElement("audio");
+soundWrong.setAttribute("src", "./assets/sfx/incorrect.wav");
+
 
 // Load highscores on page load.
 loadHighscores();
@@ -41,6 +52,7 @@ function playGame() {
 
     countdownTimer(timer);
     displayQuestion();
+    timerText.classList.remove("hide");
 }
 
 // Clear questions from previous question and replace with unordered list
@@ -48,7 +60,9 @@ function playGame() {
 function displayQuestion() {
     questionOptions.innerHTML = ('');
     var options = document.createElement("ul");
-
+    options.classList.add("d-grid");
+    options.classList.add("p-0");
+    options.classList.add("m-0");
     questionTitle.textContent = questions[currentQuestion].question;
 
     questions[currentQuestion].choices.forEach(function (choice, i) {
@@ -64,8 +78,9 @@ function displayQuestion() {
 function gameOver() {
     score = timer;
     clearInterval(timerEl);
-    alert("game Over");
-    
+
+    finalScore.textContent = score;
+
     questionsScreen.setAttribute("class", "hide");
     endScreen.removeAttribute("class", "hide");
 }
@@ -102,11 +117,15 @@ questionOptions.addEventListener("click", function (event) {
         var answerIndex = questions[currentQuestion].answer;
 
         if (state == questions[currentQuestion].choices[answerIndex]) {
-            alert("Correct");
+            alertCorrect.classList.remove("hide");
+            alertWrong.classList.add("hide");
+            soundCorrect.play();
         }
         else {
             timer -= 10;
-            alert("Wrong");
+            alertWrong.classList.remove("hide");
+            alertCorrect.classList.add("hide");
+            soundWrong.play();
         }
         currentQuestion++;
         nextQuestion();

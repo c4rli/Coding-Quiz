@@ -1,10 +1,11 @@
 body {
   font-family: Arial;
   font-size: 120%;
+  background: rgb(14, 2, 83);
 }
 
 a {
-  color: #563d7c;
+  color: #8443e4;
   text-decoration: none;
   transition: color 0.1s;
 }
@@ -54,7 +55,7 @@ li:nth-child(odd) {
 }
 
 .wrapper {
-  margin: 100px auto 0 auto;
+  /* margin: 100px auto 0 auto; */
   max-width: 600px;
 }
 
@@ -85,4 +86,5 @@ li:nth-child(odd) {
   position: absolute;
   top: 10px;
   right: 10px;
+  color: white;
 }

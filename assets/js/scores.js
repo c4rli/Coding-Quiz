@@ -26,7 +26,7 @@ function displayHighscores() {
 function resetScores() {
     var emptyArray = [];
     localStorage.setItem("highscoresStorage", emptyArray);
-    alert("Scores Cleared!")
+    // alert("Scores Cleared!")
     location.reload()
 }
 
