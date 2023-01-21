@@ -13,7 +13,13 @@ function loadHighscores() {
 function displayHighscores() {
 
     highscoresEl.innerHTML = ('');
-    if (!highscores == []) {
+    if (highscores.length == 0) {
+        var entry = document.createElement("li");
+        entry.textContent = ("No Highscores Yet! :(");
+        highscoresEl.appendChild(entry);
+
+    }
+    else {
         highscores.forEach(function (values, i) {
             var entry = document.createElement("li");
             entry.textContent = (`${values[0]} - ${values[1]}`);

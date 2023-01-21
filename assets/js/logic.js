@@ -1,6 +1,6 @@
 // Global variables
 var currentQuestion = 0; // keep track of current question 
-var timer = 150; // set initial timer value
+var timer = questions.length * 10; // set initial timer value
 var score = 0; // keep track of player's score
 var countdownTime; // variable to hold countdown time
 var timerEl; // variable to hold setInterval() timer
@@ -10,6 +10,7 @@ var timerEl; // variable to hold setInterval() timer
 var startScreen = document.querySelector("#start-screen");
 var questionsScreen = document.querySelector("#questions");
 var endScreen = document.querySelector("#end-screen");
+var highscoreButton = document.querySelector("#showHighscores");
 
 // Question DOM elements
 var questionTitle = document.querySelector("#question-title");
@@ -17,12 +18,14 @@ var questionOptions = document.querySelector("#choices");
 var alertCorrect = document.querySelector(".alert-success");
 var alertWrong = document.querySelector(".alert-danger");
 var timerText = document.querySelector(".timer");
+var correctAnswerEl = document.querySelector("#correctAnswer");
 
 // End screen DOM elements
 var inputInitials = document.querySelector("#initials");
 var submitScore = document.querySelector("#submit");
 var time = document.querySelector("#time");
 var finalScore = document.querySelector("#final-score");
+var invalidInitials = document.querySelector("#invalidInitials");
 
 //Sound Effects 
 var soundCorrect = document.createElement("audio");
@@ -68,6 +71,8 @@ function displayQuestion() {
     questions[currentQuestion].choices.forEach(function (choice, i) {
         var option = document.createElement("button");
         option.textContent = choice;
+        option.classList.add("btn");
+        option.classList.add("btn-secondary");
         options.appendChild(option);
     })
     questionOptions.appendChild(options);
@@ -76,7 +81,13 @@ function displayQuestion() {
 // End game event triggered by reaching last question or time running out.
 // Changes view for player to enter initials
 function gameOver() {
-    score = timer;
+    if (timer <= 0){
+        score = 0;
+    }
+    else {
+        score = timer;
+    }
+    
     clearInterval(timerEl);
 
     finalScore.textContent = score;
@@ -115,8 +126,9 @@ questionOptions.addEventListener("click", function (event) {
     if (element.matches("button")) {
         var state = element.textContent;
         var answerIndex = questions[currentQuestion].answer;
+        var correctAnswer = questions[currentQuestion].choices[answerIndex];
 
-        if (state == questions[currentQuestion].choices[answerIndex]) {
+        if (state == correctAnswer) {
             alertCorrect.classList.remove("hide");
             alertWrong.classList.add("hide");
             soundCorrect.play();
@@ -125,6 +137,7 @@ questionOptions.addEventListener("click", function (event) {
             timer -= 10;
             alertWrong.classList.remove("hide");
             alertCorrect.classList.add("hide");
+            correctAnswerEl.textContent = correctAnswer;
             soundWrong.play();
         }
         currentQuestion++;
@@ -137,8 +150,18 @@ submitScore.addEventListener("click", function (event) {
     var playerScore = score;
     var playerInitials = inputInitials.value;
 
+    if (playerInitials == ""){
+        invalidInitials.classList.remove("hide");
+    }
+    else{
     highscores.push([playerInitials, playerScore]);
     localStorage.setItem("highscoresStorage", JSON.stringify(highscores));
 
+    window.location.href = 'highscores.html';
+}
+});
+
+// Event listener for highscore screen
+highscoreButton.addEventListener("click", function (event) {
     window.location.href = 'highscores.html';
 });

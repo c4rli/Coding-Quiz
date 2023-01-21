@@ -13,9 +13,6 @@
 </head>
 
 <body>
-  <div class="scores"><a href="highscores.html">View Highscores</a></div>
-
-  <div class="timer hide">Time: <span id="time">0</span></div>
 
   <div class="wrapper card position-absolute top-50 start-50 translate-middle">
     <div id="start-screen" class="start">
@@ -26,30 +23,45 @@
           limit. Keep in mind that incorrect answers will penalize your
           score/time by ten seconds!
         </p>
-        <button id="start" onclick="playGame()">Start Quiz</button>
+        <div class="d-grid p-0 m-0">
+        <button id="start" onclick="playGame()" class="btn btn-primary">Start Quiz</button>
+        <button id="showHighscores" class="btn btn-primary">Highscores</button>
       </div>
+    </div>
     </div>
 
     <div id="questions" class="hide">
       <h2 class="card-header" id="question-title"></h2>
       <div class="card-body">
-        <div id="choices" class="choices"></div>
         <div class="alert alert-success m-2 hide" role="alert">
           Correct!
+          <br>
         </div>
         <div class="alert alert-danger m-2 hide" role="alert">
-          Wrong!
+          The correct answer was:
+          <br><span id="correctAnswer"></span>
+         
         </div>
-      </div>
+        <div id="choices" class="choices"></div>
+        
+        
+      </div><div class="card-footer">
+          <div class="timer hide">Time: <span id="time">0</span></div>
+        </div>
     </div>
 
     <div id="end-screen" class="hide">
       <h2 class="card-header">All done!</h2>
       <div class="card-body">
+        <div id="invalidInitials" class="alert alert-danger mb-2  hide" role="alert">
+          Name cannot be empty!
+          <br>
+        </div>
         <p>Your final score is <span id="final-score"></span>.</p>
+        
         <p>
           Enter initials: <input type="text" id="initials" max="3" />
-          <button id="submit">Submit</button>
+          <button id="submit" class="btn btn-success">Submit</button>
         </p>
       </div>
     </div>
